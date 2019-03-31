@@ -1,6 +1,15 @@
 module.exports = grammar({
   name: "purescript",
 
+  externals: $ => [
+    $._newline,
+    $._indent,
+    $._dedent,
+    $._string_start,
+    $._string_content,
+    $._string_end
+  ],
+
   rules: {
     source_file: $ => seq($.module_decl, optional($.body)),
 

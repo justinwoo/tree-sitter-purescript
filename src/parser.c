@@ -7,10 +7,10 @@
 
 #define LANGUAGE_VERSION 10
 #define STATE_COUNT 45
-#define SYMBOL_COUNT 36
+#define SYMBOL_COUNT 42
 #define ALIAS_COUNT 0
-#define TOKEN_COUNT 16
-#define EXTERNAL_TOKEN_COUNT 0
+#define TOKEN_COUNT 22
+#define EXTERNAL_TOKEN_COUNT 6
 #define FIELD_COUNT 0
 #define MAX_ALIAS_SEQUENCE_LENGTH 4
 
@@ -30,26 +30,32 @@ enum {
   anon_sym_DOT = 13,
   anon_sym_EQ = 14,
   sym_fn_body = 15,
-  sym_source_file = 16,
-  sym_module_decl = 17,
-  sym_module_name = 18,
-  sym_identifier = 19,
-  sym_exports = 20,
-  sym_export = 21,
-  sym_body = 22,
-  sym_import = 23,
-  sym_type_sig = 24,
-  sym_type_body = 25,
-  sym_type_param = 26,
-  sym_quantification = 27,
-  sym_quantification_param = 28,
-  sym_fn = 29,
-  sym_params = 30,
-  sym_param = 31,
-  aux_sym_type_body_repeat1 = 32,
-  aux_sym_type_param_repeat1 = 33,
-  aux_sym_quantification_repeat1 = 34,
-  aux_sym_params_repeat1 = 35,
+  sym__newline = 16,
+  sym__indent = 17,
+  sym__dedent = 18,
+  sym__string_start = 19,
+  sym__string_content = 20,
+  sym__string_end = 21,
+  sym_source_file = 22,
+  sym_module_decl = 23,
+  sym_module_name = 24,
+  sym_identifier = 25,
+  sym_exports = 26,
+  sym_export = 27,
+  sym_body = 28,
+  sym_import = 29,
+  sym_type_sig = 30,
+  sym_type_body = 31,
+  sym_type_param = 32,
+  sym_quantification = 33,
+  sym_quantification_param = 34,
+  sym_fn = 35,
+  sym_params = 36,
+  sym_param = 37,
+  aux_sym_type_body_repeat1 = 38,
+  aux_sym_type_param_repeat1 = 39,
+  aux_sym_quantification_repeat1 = 40,
+  aux_sym_params_repeat1 = 41,
 };
 
 static const char *ts_symbol_names[] = {
@@ -69,6 +75,12 @@ static const char *ts_symbol_names[] = {
   [anon_sym_DOT] = ".",
   [anon_sym_EQ] = "=",
   [sym_fn_body] = "fn_body",
+  [sym__newline] = "_newline",
+  [sym__indent] = "_indent",
+  [sym__dedent] = "_dedent",
+  [sym__string_start] = "_string_start",
+  [sym__string_content] = "_string_content",
+  [sym__string_end] = "_string_end",
   [sym_source_file] = "source_file",
   [sym_module_decl] = "module_decl",
   [sym_module_name] = "module_name",
@@ -154,6 +166,30 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
   },
   [sym_fn_body] = {
     .visible = true,
+    .named = true,
+  },
+  [sym__newline] = {
+    .visible = false,
+    .named = true,
+  },
+  [sym__indent] = {
+    .visible = false,
+    .named = true,
+  },
+  [sym__dedent] = {
+    .visible = false,
+    .named = true,
+  },
+  [sym__string_start] = {
+    .visible = false,
+    .named = true,
+  },
+  [sym__string_content] = {
+    .visible = false,
+    .named = true,
+  },
+  [sym__string_end] = {
+    .visible = false,
     .named = true,
   },
   [sym_source_file] = {
@@ -714,7 +750,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
 }
 
 static TSLexMode ts_lex_modes[STATE_COUNT] = {
-  [0] = {.lex_state = 0},
+  [0] = {.lex_state = 0, .external_lex_state = 1},
   [1] = {.lex_state = 42},
   [2] = {.lex_state = 43},
   [3] = {.lex_state = 0},
@@ -761,12 +797,44 @@ static TSLexMode ts_lex_modes[STATE_COUNT] = {
   [44] = {.lex_state = 43},
 };
 
+enum {
+  ts_external_token__newline = 0,
+  ts_external_token__indent = 1,
+  ts_external_token__dedent = 2,
+  ts_external_token__string_start = 3,
+  ts_external_token__string_content = 4,
+  ts_external_token__string_end = 5,
+};
+
+static TSSymbol ts_external_scanner_symbol_map[EXTERNAL_TOKEN_COUNT] = {
+  [ts_external_token__newline] = sym__newline,
+  [ts_external_token__indent] = sym__indent,
+  [ts_external_token__dedent] = sym__dedent,
+  [ts_external_token__string_start] = sym__string_start,
+  [ts_external_token__string_content] = sym__string_content,
+  [ts_external_token__string_end] = sym__string_end,
+};
+
+static bool ts_external_scanner_states[2][EXTERNAL_TOKEN_COUNT] = {
+  [1] = {
+    [ts_external_token__newline] = true,
+    [ts_external_token__string_end] = true,
+    [ts_external_token__dedent] = true,
+    [ts_external_token__string_content] = true,
+    [ts_external_token__indent] = true,
+    [ts_external_token__string_start] = true,
+  },
+};
+
 static uint16_t ts_parse_table[STATE_COUNT][SYMBOL_COUNT] = {
   [0] = {
+    [sym__newline] = ACTIONS(1),
     [sym_fn_arrow] = ACTIONS(1),
     [sym_fn_body] = ACTIONS(1),
     [anon_sym_module] = ACTIONS(1),
     [anon_sym_RPAREN] = ACTIONS(1),
+    [sym__string_end] = ACTIONS(1),
+    [sym__dedent] = ACTIONS(1),
     [anon_sym_forall] = ACTIONS(1),
     [sym_constraint_arrow] = ACTIONS(1),
     [anon_sym_EQ] = ACTIONS(1),
@@ -774,10 +842,13 @@ static uint16_t ts_parse_table[STATE_COUNT][SYMBOL_COUNT] = {
     [anon_sym_COLON_COLON] = ACTIONS(1),
     [anon_sym_LPAREN] = ACTIONS(1),
     [ts_builtin_sym_end] = ACTIONS(1),
+    [sym__string_content] = ACTIONS(1),
+    [sym__indent] = ACTIONS(1),
     [sym_nat_trans_arrow] = ACTIONS(1),
     [anon_sym_DOT] = ACTIONS(1),
     [anon_sym_where] = ACTIONS(1),
     [anon_sym_import] = ACTIONS(1),
+    [sym__string_start] = ACTIONS(1),
   },
   [1] = {
     [sym_source_file] = STATE(3),
@@ -1067,6 +1138,12 @@ static TSParseActionEntry ts_parse_actions[] = {
   [110] = {.count = 2, .reusable = true}, REDUCE(aux_sym_type_body_repeat1, 2), SHIFT_REPEAT(37),
 };
 
+void *tree_sitter_purescript_external_scanner_create(void);
+void tree_sitter_purescript_external_scanner_destroy(void *);
+bool tree_sitter_purescript_external_scanner_scan(void *, TSLexer *, const bool *);
+unsigned tree_sitter_purescript_external_scanner_serialize(void *, char *);
+void tree_sitter_purescript_external_scanner_deserialize(void *, const char *, unsigned);
+
 #ifdef _WIN32
 #define extern __declspec(dllexport)
 #endif
@@ -1086,6 +1163,15 @@ extern const TSLanguage *tree_sitter_purescript(void) {
     .max_alias_sequence_length = MAX_ALIAS_SEQUENCE_LENGTH,
     .lex_fn = ts_lex,
     .external_token_count = EXTERNAL_TOKEN_COUNT,
+    .external_scanner = {
+      (const bool *)ts_external_scanner_states,
+      ts_external_scanner_symbol_map,
+      tree_sitter_purescript_external_scanner_create,
+      tree_sitter_purescript_external_scanner_destroy,
+      tree_sitter_purescript_external_scanner_scan,
+      tree_sitter_purescript_external_scanner_serialize,
+      tree_sitter_purescript_external_scanner_deserialize,
+    },
   };
   return &language;
 }
