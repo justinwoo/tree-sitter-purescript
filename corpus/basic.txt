@@ -1,0 +1,109 @@
+===
+Module header
+===
+
+module Main where
+
+---
+
+(source_file (module_decl (module_name)))
+
+===
+import Prelude
+===
+
+module Main where
+
+import Prelude
+
+---
+
+(source_file (module_decl (module_name))
+             (body (import (module_name))))
+
+===
+main
+===
+
+module Main where
+
+main = "hi"
+
+---
+
+(source_file
+ (module_decl (module_name))
+ (body (fn (identifier) (fn_body))))
+
+===
+fn
+===
+
+module Main where
+
+fn x = "hi"
+
+---
+
+(source_file
+ (module_decl (module_name))
+ (body (fn (identifier)
+           (params (param (identifier)))
+           (fn_body))))
+
+===
+fn sig
+===
+
+module Main where
+
+fn :: Int
+
+---
+
+(source_file
+ (module_decl (module_name))
+ (body (type_sig (identifier) (type_body (type_param)))))
+
+
+===
+fn sig med quant
+===
+
+module Main where
+
+fn :: forall x. x -> Int
+
+---
+
+(source_file
+ (module_decl (module_name))
+ (body (type_sig
+        (identifier)
+        (type_body
+         (quantification (quantification_param))
+         (type_param)
+         (fn_arrow)
+         (type_param)))))
+
+===
+fn sig med constraint
+===
+
+module Main where
+
+fn :: forall f. Functor f => f ~> List
+
+---
+
+(source_file
+ (module_decl (module_name))
+ (body (type_sig
+        (identifier)
+        (type_body
+         (quantification (quantification_param))
+         (type_param)
+         (constraint_arrow)
+         (type_param)
+         (nat_trans_arrow)
+         (type_param)))))

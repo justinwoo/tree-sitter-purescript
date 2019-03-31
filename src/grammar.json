@@ -2,8 +2,294 @@
   "name": "purescript",
   "rules": {
     "source_file": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "module_decl"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "body"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "module_decl": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "module"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "module_name"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "exports"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "where"
+        }
+      ]
+    },
+    "module_name": {
+      "type": "SYMBOL",
+      "name": "_types_modules_regex"
+    },
+    "_types_modules_regex": {
+      "type": "PATTERN",
+      "value": "[A-Z][0-9A-Za-z_]*(\\.[A-Z][0-9A-Za-z_]*)*"
+    },
+    "identifier": {
+      "type": "SYMBOL",
+      "name": "_fn_name_regex"
+    },
+    "_fn_name_regex": {
+      "type": "PATTERN",
+      "value": "[a-z_][0-9A-Za-z_']*"
+    },
+    "exports": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "SYMBOL",
+          "name": "export"
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "export": {
+      "type": "SYMBOL",
+      "name": "identifier"
+    },
+    "body": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "type_sig"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "fn"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "import"
+            }
+          ]
+        }
+      ]
+    },
+    "import": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "import"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "module_name"
+        }
+      ]
+    },
+    "type_sig": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "STRING",
+          "value": "::"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_body"
+        }
+      ]
+    },
+    "type_body": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "quantification"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "type_param"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "SYMBOL",
+                        "name": "constraint_arrow"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "fn_arrow"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "nat_trans_arrow"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "type_param"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "type_param": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_types_modules_regex"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_fn_name_regex"
+          }
+        ]
+      }
+    },
+    "constraint_arrow": {
       "type": "STRING",
-      "value": "hi"
+      "value": "=>"
+    },
+    "fn_arrow": {
+      "type": "STRING",
+      "value": "->"
+    },
+    "nat_trans_arrow": {
+      "type": "STRING",
+      "value": "~>"
+    },
+    "quantification": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "forall"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SYMBOL",
+            "name": "quantification_param"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "."
+        }
+      ]
+    },
+    "quantification_param": {
+      "type": "SYMBOL",
+      "name": "_fn_name_regex"
+    },
+    "fn": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "params"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "="
+        },
+        {
+          "type": "SYMBOL",
+          "name": "fn_body"
+        }
+      ]
+    },
+    "params": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SYMBOL",
+        "name": "param"
+      }
+    },
+    "param": {
+      "type": "SYMBOL",
+      "name": "identifier"
+    },
+    "fn_body": {
+      "type": "STRING",
+      "value": "\"hi\""
     }
   },
   "extras": [

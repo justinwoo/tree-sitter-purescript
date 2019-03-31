@@ -1,11 +1,134 @@
 [
   {
+    "type": "body",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "export",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "exports",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "fn",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "identifier",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "import",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "module_decl",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "module_name",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "param",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "params",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "quantification",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "quantification_param",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "source_file",
     "named": true,
     "fields": {}
   },
   {
-    "type": "hi",
+    "type": "type_body",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "type_param",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "type_sig",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "module",
     "named": false
+  },
+  {
+    "type": "where",
+    "named": false
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": "import",
+    "named": false
+  },
+  {
+    "type": "::",
+    "named": false
+  },
+  {
+    "type": "constraint_arrow",
+    "named": true
+  },
+  {
+    "type": "fn_arrow",
+    "named": true
+  },
+  {
+    "type": "nat_trans_arrow",
+    "named": true
+  },
+  {
+    "type": "forall",
+    "named": false
+  },
+  {
+    "type": ".",
+    "named": false
+  },
+  {
+    "type": "=",
+    "named": false
+  },
+  {
+    "type": "fn_body",
+    "named": true
   }
 ]
