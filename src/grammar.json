@@ -288,8 +288,30 @@
       "name": "identifier"
     },
     "fn_body": {
-      "type": "STRING",
-      "value": "\"hi\""
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\"hi\""
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_indent"
+            },
+            {
+              "type": "STRING",
+              "value": "\"hi\""
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_dedent"
+            }
+          ]
+        }
+      ]
     }
   },
   "extras": [

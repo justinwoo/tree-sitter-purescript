@@ -52,6 +52,23 @@ fn x = "hi"
            (fn_body))))
 
 ===
+fn body indented
+===
+
+module Main where
+
+fn x =
+  "hi"
+
+---
+
+(source_file
+ (module_decl (module_name))
+ (body (fn (identifier)
+           (params (param (identifier)))
+           (fn_body))))
+
+===
 fn sig
 ===
 

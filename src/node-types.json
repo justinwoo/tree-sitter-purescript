@@ -20,6 +20,11 @@
     "fields": {}
   },
   {
+    "type": "fn_body",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "identifier",
     "named": true,
     "fields": {}
@@ -128,7 +133,7 @@
     "named": false
   },
   {
-    "type": "fn_body",
-    "named": true
+    "type": "\"hi\"",
+    "named": false
   }
 ]

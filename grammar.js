@@ -71,7 +71,7 @@ module.exports = grammar({
     // unary: -1
     // binary: f <$> xs
     // app: expr expr
-    fn_body: $ => '"hi"'
+    fn_body: $ => choice('"hi"', seq($._indent, '"hi"', $._dedent))
   }
 });
 
